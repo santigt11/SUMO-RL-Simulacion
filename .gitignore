@@ -1,0 +1,36 @@
+# Credenciales / secrets
+data/account.json
+data/auth.json
+.env
+**/.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+.venv/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Carpetas temp
+*temp*/
+temp_respaldo\ q/
+
+# Configuracion personal de herramientas
+config/
+
+# IDE
+.vscode/
+.idea/
+
+# Artefactos generados (regenerables)
+*.pkl
+*.zip
+*.csv
+*tripinfo*.xml
+*.npz
+*.png
+evaluations.npz
