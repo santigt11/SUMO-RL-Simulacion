@@ -26,11 +26,5 @@ config/
 .vscode/
 .idea/
 
-# Artefactos generados (regenerables)
-*.pkl
-*.zip
-*.csv
-*tripinfo*.xml
-*.npz
-*.png
-evaluations.npz
+# Base de datos (grande, no subir)
+Tratamiento_Datos/BD*/
