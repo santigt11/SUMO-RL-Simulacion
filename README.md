@@ -57,8 +57,7 @@ Tesis/
 │       ├── metricas.csv
 │       └── tripinfo.xml
 ├── Tratamiento_Datos/
-│   ├── procesamiento_aforos.ipynb       # Procesamiento de conteos vehiculares
-│   └── BD_2024_4-1/                     # Dataset de detección de objetos
+│   └── procesamiento_aforos.ipynb       # Procesamiento de conteos vehiculares
 ├── dashboard/
 │   ├── app.py                           # Aplicación Streamlit
 │   ├── utils.py                         # Funciones de carga de datos
