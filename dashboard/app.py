@@ -260,7 +260,7 @@ def main():
         st.markdown("### Datos del Proyecto")
         st.markdown("""
         - **Intersección:** Av. Isidro Ayora x 8 de Diciembre
-        - **Demanda:** 2418 vehículos (Weibull)
+        - **Demanda:** 2334 vehículos (Weibull)
         - **Simulación:** SUMO 1.26.0
         - **Ciclo:** 3600 segundos
         """)
@@ -376,14 +376,11 @@ def main():
     tab1, tab2, tab3 = st.tabs(["Evolución Temporal", "Distribución por Tipo", "Patrón de Demanda"])
 
     with tab1:
+        # Grafico 1: Vehiculos en Cola
+        st.markdown("**Vehículos en Cola**")
         if not df_csv.empty:
-            fig = make_subplots(
-                rows=2, cols=1,
-                subplot_titles=("Vehículos en Cola", "Tiempo de Espera Promedio"),
-                vertical_spacing=0.15,
-            )
-
-            fig.add_trace(
+            fig_cola = go.Figure()
+            fig_cola.add_trace(
                 go.Scatter(
                     x=df_csv["step"],
                     y=df_csv["system_total_stopped"],
@@ -392,36 +389,61 @@ def main():
                     line=dict(color="#3B82F6", width=2),
                     fill="tozeroy",
                     fillcolor="rgba(59, 130, 246, 0.1)",
-                ),
-                row=1, col=1,
-            )
-
-            if "system_mean_waiting_time" in df_csv.columns:
-                fig.add_trace(
-                    go.Scatter(
-                        x=df_csv["step"],
-                        y=df_csv["system_mean_waiting_time"],
-                        mode="lines",
-                        name="Espera",
-                        line=dict(color="#D97706", width=2),
-                    ),
-                    row=2, col=1,
                 )
-
-            fig.update_layout(
-                height=500,
-                showlegend=True,
+            )
+            fig_cola.update_layout(
+                height=350,
                 font=dict(family="Fira Sans, sans-serif"),
                 plot_bgcolor="white",
                 paper_bgcolor="white",
+                xaxis_title="Paso de Simulación",
+                yaxis_title="Vehículos",
+                showlegend=False,
             )
-            fig.update_xaxes(title_text="Paso de Simulación", row=2, col=1)
-            fig.update_yaxes(title_text="Vehículos", row=1, col=1)
-            fig.update_yaxes(title_text="Segundos", row=2, col=1)
-
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig_cola, use_container_width=True)
         else:
-            st.warning("No hay datos de métricas temporales para este escenario.")
+            st.warning("No hay datos de métricas temporales.")
+
+        # Grafico 2: Tiempo de Espera Promedio
+        st.markdown("**Tiempo de Espera Promedio**")
+        if not df_trip.empty:
+            df_trip_sorted = df_trip.sort_values("depart").reset_index(drop=True)
+            window_size = max(1, len(df_trip_sorted) // 50)
+            df_trip_sorted["waiting_rolling"] = df_trip_sorted["waitingTime"].rolling(
+                window=window_size, min_periods=1
+            ).mean()
+
+            fig_espera = go.Figure()
+            fig_espera.add_trace(
+                go.Scatter(
+                    x=df_trip_sorted["depart"],
+                    y=df_trip_sorted["waitingTime"],
+                    mode="markers",
+                    name="Espera por vehículo",
+                    marker=dict(color="#3B82F6", size=4, opacity=0.4),
+                )
+            )
+            fig_espera.add_trace(
+                go.Scatter(
+                    x=df_trip_sorted["depart"],
+                    y=df_trip_sorted["waiting_rolling"],
+                    mode="lines",
+                    name="Media móvil",
+                    line=dict(color="#D97706", width=3),
+                )
+            )
+            fig_espera.update_layout(
+                height=350,
+                font=dict(family="Fira Sans, sans-serif"),
+                plot_bgcolor="white",
+                paper_bgcolor="white",
+                xaxis_title="Segundo de Llegada (Depart)",
+                yaxis_title="Tiempo de Espera (s)",
+                showlegend=True,
+            )
+            st.plotly_chart(fig_espera, use_container_width=True)
+        else:
+            st.warning("No hay datos de viajes (tripinfo).")
 
     with tab2:
         vtype_df = get_vehicle_type_breakdown(scenario, current_custom)

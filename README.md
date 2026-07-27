@@ -24,7 +24,7 @@ Este proyecto compara tres estrategias de control semafórico aplicadas a una in
 2. **Q-Learning Tabular:** Agente de aprendizaje por refuerzo que discretiza el estado de tráfico en 288 estados y 12 acciones.
 3. **Deep Q-Network (DQN):** Agente de aprendizaje profundo que procesa el estado continuo mediante una red neuronal MLP [128, 128].
 
-Los tres escenarios utilizan la misma demanda vehicular generada estocásticamente (distribución de Weibull, 2418 vehículos en 3600 segundos) y la misma función de recompensa multi-objetivo.
+Los tres escenarios utilizan la misma demanda vehicular generada estocásticamente (distribución de Weibull, 2334 vehículos en 3600 segundos) y la misma función de recompensa multi-objetivo.
 
 ---
 
@@ -115,7 +115,7 @@ Este notebook procesa los conteos empíricos de vehículos realizados a partir d
 3. Clasificación por acceso (Norte vía -E5, Oeste vía -E4).
 4. Descarga del dataset de imágenes etiquetadas desde Roboflow (3 clases: car, moto, bus).
 
-**Resultado:** Distribución por tipo de vehículo: 74.1% car, 14.8% moto, 11.1% bus. Demanda de diseño: 1205 vehículos/hora por acceso.
+**Resultado:** Distribución por tipo de vehículo: 74.1% car, 14.8% moto, 11.1% bus. Flujo promedio: 1166.9 veh/hora por acceso.
 
 ### 4.2 Generación de Demanda Estocástica
 
@@ -131,7 +131,7 @@ $$\lambda(t) = \frac{k}{\lambda_{w}} \left( \frac{t}{\lambda_{w}} \right)^{k-1} 
 
 - k = 2.5 (forma): Controla la asimetría de la curva.
 - λ_w = 0.55 × 3600 (escala): Localiza el pico entre 20-30 minutos.
-- Total de vehículos: 2418.
+- Total de vehículos: 2334.
 - Duración: 3600 segundos.
 - Seed: 42 (reproducibilidad).
 
@@ -149,8 +149,8 @@ $$\lambda(t) = \frac{k}{\lambda_{w}} \left( \frac{t}{\lambda_{w}} \right)^{k-1} 
 Ejecuta el simulador SUMO con los archivos generados y verifica:
 
 - Ausencia de errores de conexión en la red.
-- Total de vehículos procesados: 2418.
-- Distribución por tipo: car (1791), moto (358), bus (269).
+- Total de vehículos procesados: 2334.
+- Distribución por tipo: car (1608), moto (195), bus (531).
 - Distribución temporal: pico en intervalo 20-30 minutos.
 - Métricas de viaje: tiempo de espera promedio 57.63 s, cola promedio 40.06 vehículos.
 
@@ -174,7 +174,7 @@ Implementa el controlador semafórico convencional con ciclos fijos.
 
 | Métrica | Valor |
 |---|---|
-| Vehículos procesados | 2418 |
+| Vehículos procesados | 2334 |
 | Velocidad promedio | 18.17 km/h |
 | Tiempo de espera promedio | 57.63 s |
 | Tiempo de espera máximo | 117.00 s |
